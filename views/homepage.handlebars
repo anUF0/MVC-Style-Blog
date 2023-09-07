@@ -1,0 +1,11 @@
+{{#each posts as |posts|}}
+  <container class='row align-middle mb-5'>
+    <title class='col-md-12'>
+      <h2 class="col-md-6">{{post.title}}</h2> <p class="justify-content-end
+      mx-5">{{post.date_created}}</p>
+    </title>
+    <content class='col-md-6'>
+      <p>{{post.content}}</p>
+    </content>
+  </container>
+{{/each}}
