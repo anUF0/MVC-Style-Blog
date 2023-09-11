@@ -1,4 +1,4 @@
-<p class="col-md-6 col-lg-4 mb-5">Please log in to leave comments</p>
+
 <div class="card col-md-6 col-lg-4 mb-5">
     <div class="card-header">
         <h5 class="card-title float-left">{{post.title}}</h5>
@@ -23,6 +23,8 @@
         <button type="submit" class="btn btn-primary">Submit Comment</button>        
     </form>               
 </div>
+{{#else}}
+<p class="col-md-6 col-lg-4 mb-5">Please log in to leave comments</p>
 {{/if}}
 
 <script src="/js/comment.js"></script>

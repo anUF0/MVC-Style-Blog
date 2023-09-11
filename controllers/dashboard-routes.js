@@ -5,6 +5,9 @@ const withAuth = require('../utils/auth');
 // Renders all posts at /dashboard
 router.get('/', withAuth, async (req, res) => {
   try {
+    const userData = await User.findByPk(req.session.user_id, {
+      attributes: { exclude: ['password'] },
+    });
     const postData = await Post.findAll({
       where: {
         user_id: req.session.user_id,
@@ -22,9 +25,15 @@ router.get('/', withAuth, async (req, res) => {
         },
       ],
     });
-    const posts = postData.get({ plain: true });
-    res.render('dashboard', { posts, loggedIn: true, name: req.session.name });
+    const posts = postData.map((post) => post.get({ plain: true }));
+    res.render('dashboard', {
+      userData,
+      posts,
+      logged_in: req.session.logged_in,
+      loggedIn: true,
+    });
   } catch (err) {
+    console.log(err);
     res.status(500).json(err);
   }
 });
@@ -32,6 +41,9 @@ router.get('/', withAuth, async (req, res) => {
 // Gets one post to edit at dashboard/edit/:id
 router.get('/edit/:id', withAuth, async (req, res) => {
   try {
+    const userData = await User.findByPk(req.session.user_id, {
+      attributes: { exclude: ['password'] },
+    });
     const postData = await Post.findOne({
       where: {
         id: req.params.id,
@@ -52,11 +64,12 @@ router.get('/edit/:id', withAuth, async (req, res) => {
         },
       ],
     });
-    const posts = postData.get({ plain: true });
-    res.render('edit-posts', {
+    const posts = postData.map((post) => post.get({ plain: true }));
+    res.render('dashboard', {
+      userData,
       posts,
+      logged_in: req.session.logged_in,
       loggedIn: true,
-      name: req.session.name,
     });
   } catch (err) {
     res.status(500).json(err);
