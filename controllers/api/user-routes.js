@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const { User, Post, Comment } = require('../../models');
 
-//Get All Users at api/users
+//Get All Users at api/users/login
 router.get('/login', async (req, res) => {
   try {
     const userData = await User.findAll({
