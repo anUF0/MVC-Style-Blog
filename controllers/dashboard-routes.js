@@ -14,7 +14,7 @@ router.get('/', withAuth, async (req, res) => {
       include: [
         {
           model: Comment,
-          attributes: ['id', 'comment', 'post_id', 'user_id', 'date_created'],
+          attributes: ['id', 'content', 'post_id', 'user_id', 'date_created'],
           include: {
             model: User,
             attributes: ['name'],
@@ -44,7 +44,7 @@ router.get('/edit/:id', withAuth, async (req, res) => {
         },
         {
           model: Comment,
-          attributes: ['id', 'comment', 'post_id', 'user_id', 'date_created'],
+          attributes: ['id', 'content', 'post_id', 'user_id', 'date_created'],
           include: {
             model: User,
             attributes: ['name'],

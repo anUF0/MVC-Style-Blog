@@ -5,7 +5,7 @@ const withAuth = require('../utils/auth');
 //Renders login page
 router.get('/login', (req, res) => {
   if (req.session.logged_in) {
-    res.redirect('/api/user-profile');
+    res.redirect('/api/dashboard');
     return;
   }
   res.render('login');
@@ -31,8 +31,13 @@ router.get('/', withAuth, async (req, res) => {
         },
       ],
     });
-
-    const posts = postData.map((post) => post.get({ plain: true }));
+    const posts = postData.get({ plain: true });
+    res.render('posts', {
+      userData,
+      posts,
+      logged_in: req.session.logged_in,
+      login: true,
+    });
 
     res.render('homepage', { posts });
   } catch (err) {
@@ -56,10 +61,10 @@ router.get('./post/:id', async (req, res) => {
         },
       ],
     });
-    const post = postData.get({ plain: true });
+    const posts = postData.get({ plain: true });
     res.render('posts', {
       userData,
-      post,
+      posts,
       logged_in: req.session.logged_in,
       login: true,
     });
