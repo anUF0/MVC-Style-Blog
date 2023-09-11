@@ -50,7 +50,7 @@ router.get('./post/:id', async (req, res) => {
       include: [
         {
           model: Comment,
-          inclide: {
+          include: {
             model: User,
           },
         },

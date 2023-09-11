@@ -1,53 +1,71 @@
-//Renders personal dashboard with Users posts
 const router = require('express').Router();
 const { User, Post, Comment } = require('../models');
 const withAuth = require('../utils/auth');
 
-//Renders dashboard at /dashboard
+// Renders all posts at /dashboard
 router.get('/', withAuth, async (req, res) => {
   try {
-    const userData = await Post.findAll(req.session.user_id, {
+    const postData = await Post.findAll({
+      where: {
+        user_id: req.session.user_id,
+      },
+      attributes: ['id', 'title', 'content', 'date_created'],
       order: [['date_created', 'DESC']],
-    });
-    const dashboard = userData.get({ plain: true });
-    res.render('dashboard', dashboard, { logged_in: req.session.logged_in });
-  } catch (err) {
-    res.status(500).json(err);
-  }
-});
-
-//Renders editing page at /dashboard/edit/id
-router.get('/edit/:id', withAuth, async (req, res) => {
-  try {
-    const postData = await Post.findOne({
-      attributes: ['id', 'title', 'content', 'created_at'],
       include: [
         {
-          model: User,
-          attributes: ['username'],
-        },
-        {
           model: Comment,
-          attributes: ['id', 'comment', 'postId', 'userId', 'created_at'],
+          attributes: ['id', 'comment', 'post_id', 'user_id', 'date_created'],
           include: {
             model: User,
-            attributes: ['username'],
+            attributes: ['name'],
           },
         },
       ],
     });
-    const post = postData.get({ plain: true });
-    res.render('edit-post', post);
-  } catch (err) {
-    res.status(404).json(err);
-  }
-});
-
-//Renders new post page at /dashboard/new
-router.get('/new', withAuth, (req, res) => {
-  try {
-    res.render('new-post', { name: req.session.name });
+    const posts = postData.get({ plain: true });
+    res.render('dashboard', { posts, loggedIn: true, name: req.session.name });
   } catch (err) {
     res.status(500).json(err);
   }
 });
+
+// Gets one post to edit at dashboard/edit/:id
+router.get('/edit/:id', withAuth, async (req, res) => {
+  try {
+    const postData = await Post.findOne({
+      where: {
+        id: req.params.id,
+      },
+      attributes: ['id', 'title', 'content', 'date_created'],
+      include: [
+        {
+          model: User,
+          attributes: ['name'],
+        },
+        {
+          model: Comment,
+          attributes: ['id', 'comment', 'post_id', 'user_id', 'date_created'],
+          include: {
+            model: User,
+            attributes: ['name'],
+          },
+        },
+      ],
+    });
+    const posts = postData.get({ plain: true });
+    res.render('edit-post', {
+      posts,
+      loggedIn: true,
+      name: req.session.name,
+    });
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+//Gets new post at /dashboard/new
+router.get('/new', withAuth, (req, res) => {
+  res.render('new-post', { name: req.session.name });
+});
+
+module.exports = router;
