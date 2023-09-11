@@ -1,7 +1,9 @@
 # MVC-Style-Blog
 ## Description
 A simple blog with commenting feature
-Hey, this project has been abdonded in itc current state, but I might as well submit it for a few pity marks.
+Hey, this project has been abandoned in itc current state.
+The current major error is to do with processing the  user data into usable structure. Accordin to my debug there is some error is the express libray.
+In addion a finalised UI was never implimented
 
 ## Table of Contents 
 - [Installation](#installation)
@@ -10,7 +12,7 @@ Hey, this project has been abdonded in itc current state, but I might as well su
 - [Contact](#contact)
 
 ## Installation
-This site can be run (as of 11/9/2023) at the link https://your-recipe-book-985222554f68.herokuapp.com/.
+This site can be run (as of 11/9/2023) at the link https://chic-tech-blog-d6a54ec35dde.herokuapp.com/
 
 Alternatively, it can be run on a localhost 3001 with the command 'npm start' after cloning the repository  and installing relevant dependencies.
 

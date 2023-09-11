@@ -24,7 +24,6 @@ router.get('/signup', (req, res) => {
 router.get('/', withAuth, async (req, res) => {
   try {
     const userData = await User.findAll();
-    const users = userData.map((user) => user.get({ plain: true }));
     const postData = await Post.findAll({
       include: [
         {
@@ -35,7 +34,7 @@ router.get('/', withAuth, async (req, res) => {
     });
     const posts = postData.map((post) => post.get({ plain: true }));
     res.render('post', {
-      users,
+      userData,
       posts,
       logged_in: req.session.logged_in,
       login: true,
