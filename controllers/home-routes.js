@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { User, Post } = require('../models');
+const { User, Post, Comment } = require('../models');
 const withAuth = require('../utils/auth');
 
 //Renders login page
@@ -20,6 +20,7 @@ router.get('/signup', (req, res) => {
   res.render('signup');
 });
 
+//Renders Homepage with all posts
 router.get('/', withAuth, async (req, res) => {
   try {
     const postData = await Post.findAll({
@@ -36,6 +37,34 @@ router.get('/', withAuth, async (req, res) => {
     res.render('homepage', { posts });
   } catch (err) {
     res.status(500).json(err);
+  }
+});
+
+//Renders single Post
+router.get('./post/:id', async (req, res) => {
+  try {
+    const userData = await User.findByPk(req.session.user_id, {
+      attributes: { exclude: ['password'] },
+    });
+    const postData = await Post.findByPk(req.params.id, {
+      include: [
+        {
+          model: Comment,
+          inclide: {
+            model: User,
+          },
+        },
+      ],
+    });
+    const post = postData.get({ plain: true });
+    res.render('posts', {
+      userData,
+      post,
+      logged_in: req.session.logged_in,
+      login: true,
+    });
+  } catch (err) {
+    res.status(400).json(err);
   }
 });
 

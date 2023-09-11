@@ -15,7 +15,7 @@ const loginFormHandler = async (event) => {
 
     if (response.ok) {
       // If successful, redirect the browser to the profile page
-      document.location.replace('/api/user-profile');
+      document.location.replace('/dashboard');
     } else {
       document.getElementById('login-fail').innerHTML = 'Login Failed';
     }
